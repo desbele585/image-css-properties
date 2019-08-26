@@ -45,7 +45,7 @@
         </select>
         <label>background-size</label>
         <span>
-            <select v-model="backgroundSize" @change="togglePercentage">
+            <select v-model="backgroundSize">
                 <option value="initial" selected>initial</option>
                 <option value="contain">contain</option>
                 <option value="cover">cover</option>
@@ -63,7 +63,7 @@
         </select>
         <code>
             <pre>
-                {{styleFormatted}}
+{{styleFormatted}}
             </pre>
         </code>
     </nav>
@@ -104,6 +104,16 @@ export default {
         code(){
             return "myCode"
         },
+        
+        styleFormatted(){
+            let style = this.style
+            return ".img {\n" + Object.keys(style)
+            .filter(property => style[property] !== null)
+            .map( property => `\t${property}: ${style[property]}`)
+            .join("\n")
+            + "\n}"
+        },
+
         style(){
             return {
                 'padding': `${this.padding}px`,
@@ -112,7 +122,7 @@ export default {
                 'height': `${this.height}px`,
                 'background-repeat' : this.backgroundRepeat,
                 'background-image': `url(${this.currentImage})`,
-                'background-position': this.backgroundPosition,
+                'background-position': this.backgroundPosition + (this.backgroundPosition2!="none"?" "+this.backgroundPosition2:""),
                 'background-attachment': this.backgroundAttachment,
                 'background-size': this.backgroundSize === 'percentage' ? `${this.backgroundSizePercantage}%` : this.backgroundSize,
                 'background-clip': this.backgroundClip,
@@ -211,5 +221,9 @@ main{
     align-items: center;
     font-size: 2rem;
     color: rgba(255,255,255,1);
+}
+code{
+    background-color: rgba(0,0,0,0.5);
+    grid-column: span 2;
 }
 </style>
